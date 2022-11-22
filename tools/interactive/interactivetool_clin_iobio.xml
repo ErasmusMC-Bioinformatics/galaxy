@@ -40,7 +40,7 @@
         ##     &bai2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12891.cram.crai
         ##     &sample2=NA12891
         ##     &affectedStatus2=unaffected
-        nginx -g daemon off;
+        nginx -g 'daemon off;'
     ]]>
     </command>
     <inputs>
