@@ -1,0 +1,52 @@
+<tool id="interactive_tool_clin_iobio" tool_type="interactive" name="clin.iobio visualisation" version="v3.2.4">
+    <requirements>
+	    <container type="docker">clintest</container>
+        <!--<container type="docker">whoisdonlee/iobio_container:main</container>-->
+    </requirements>
+    <entry_points>
+        <entry_point name="Clin io.bio visualisation" requires_domain="True">
+            <port>4030</port>
+            <url><![CDATA[/?gene=PDHA1&genes=PDHA1,ARHGAP8,RAI1,PLXNA1,SCN8A,SMARCA2&species=Human&build=GRCh38&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=female&vcf0=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz&tbi0=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz.tbi&bam0=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12878.cram&bai0=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12878.cram.crai&sample0=NA12878&affectedStatus0=affected&rel1=mother&sex1=female&vcf1=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz&tbi1=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz.tbi&bam1=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12892.cram&bai1=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12892.cram.crai&sample1=NA12892&affectedStatus1=unaffected&rel2=father&sex2=male&vcf2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz&tbi2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz.tbi&bam2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12891.cram&bai2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12891.cram.crai&sample2=NA12891&affectedStatus2=unaffected]]></url>
+            <!--<url>/</url>-->
+        </entry_point>
+    </entry_points>
+    <!--<configfiles>
+        <configfile name="clinconfig"><![CDATA[
+#PROJECT_NAME: Demo project
+#PROJECT_DESCRIPTION: Exome sequencing project for four samples.
+#BED_URL: https://iobio.s3.amazonaws.com/clin.iobio/20130108.exome.targets.bed
+#BUILD: GRCh37
+ID,SAMPLE_ID,PATERNAL_ID,MATERNAL_ID,SEX,AFFECTED_STATUS,RELATION,VCF_URL,TBI_URL,BAM_URL,BAI_URL
+1,NA12878,NA12891,NA12892,1,2,proband,https://s3.amazonaws.com/iobio/samples/vcf/platinum-exome.vcf.gz,,https://s3.amazonaws.com/iobio/samples/bam/NA12878.exome.bam,
+1,NA12877,NA12891,NA12892,2,1,sibling,https://s3.amazonaws.com/iobio/samples/vcf/platinum-exome.vcf.gz,,https://s3.amazonaws.com/iobio/samples/bam/NA12877.exome.bam,
+1,NA12891,0,0,1,1,father,https://s3.amazonaws.com/iobio/samples/vcf/platinum-exome.vcf.gz,,https://s3.amazonaws.com/iobio/samples/bam/NA12892.exome.bam,
+1,NA12892,0,0,2,1,mother,https://s3.amazonaws.com/iobio/samples/vcf/platinum-exome.vcf.gz,,https://s3.amazonaws.com/iobio/samples/bam/NA12891.exome.bam,
+        ]]></configfile>
+    </configfiles>-->
+    <command><![CDATA[
+
+        nginx -g 'daemon off;'
+            ]]>
+    </command>
+    <inputs>
+        <param name="genes" type="text" value="PDHA1,ARHGAP8,RAI1,PLXNA1,SCN8A,SMARCA2" size="100x5" label="Genes of interest" help=""/>
+
+    </inputs>
+    <outputs>
+        <data name="outfile" format="txt" />
+    </outputs>
+    <tests>
+    </tests>
+    <help><![CDATA[
+        Required inputs:
+
+        1. BAM file: binary alignment map file
+
+        The `iobio project`_ is developed by the `Marth lab`_ at the `University of Utah Center for Genetic Discovery`_.
+
+        .. _iobio project: https://iobio.io
+        .. _Marth lab: https://marthlab.org/
+        .. _University of Utah Center for Genetic Discovery: https://ucgd.genetics.utah.edu/
+
+    ]]></help>
+</tool>
