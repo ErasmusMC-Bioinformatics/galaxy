@@ -8,7 +8,10 @@
             <port>4030</port>
             <url><![CDATA[
 /?gene=PDHA1&
-genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=${proband_vcf}&tbi0=${proband_vcf}&bam0=${proband_bam}&bai0=${proband_bam}&sample0=proband&affectedStatus0=${proband_affected}&rel1=father&sex1=male&vcf1=${input_type.father.vcf}&tbi1=${input_type.father.vcf}&bam1=${input_type.father.bam}&bai1=${input_type.father.bam}&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=${input_type.mother.vcf}&tbi2=${input_type.mother.vcf}&bam2=${input_type.mother.bam}&bai2=${input_type.mother.bam}&sample2=mother&affectedStatus2=${input_type.mother.affected}
+genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=${proband_vcf}&tbi0=${proband_vcf}&bam0=${proband_bam}&bai0=${proband_bam}&sample0=proband&affectedStatus0=${proband_affected}
+#if str($input_type.input_type_selector) == "trio"
+&rel1=father&sex1=male&vcf1=${input_type.father.vcf}&tbi1=${input_type.father.vcf}&bam1=${input_type.father.bam}&bai1=${input_type.father.bam}&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=${input_type.mother.vcf}&tbi2=${input_type.mother.vcf}&bam2=${input_type.mother.bam}&bai2=${input_type.mother.bam}&sample2=mother&affectedStatus2=${input_type.mother.affected}
+#end if
             ]]></url>
             <!--<url>/</url>-->
         </entry_point>
