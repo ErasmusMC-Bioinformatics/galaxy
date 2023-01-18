@@ -6,7 +6,10 @@
     <entry_points>
         <entry_point name="Clin io.bio visualisation" requires_domain="True">
             <port>4030</port>
-            <url><![CDATA[/?gene=PDHA1&genes=PDHA1,ARHGAP8,RAI1,PLXNA1,SCN8A,SMARCA2&species=Human&build=GRCh38&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=female&vcf0=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz&tbi0=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz.tbi&bam0=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12878.cram&bai0=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12878.cram.crai&sample0=NA12878&affectedStatus0=affected&rel1=mother&sex1=female&vcf1=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz&tbi1=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz.tbi&bam1=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12892.cram&bai1=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12892.cram.crai&sample1=NA12892&affectedStatus1=unaffected&rel2=father&sex2=male&vcf2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz&tbi2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fvcf%2F2021_platinum%2F2021_platinum_exomes_GRCh38.vcf.gz.tbi&bam2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12891.cram&bai2=https%3A%2F%2Fiobio.s3.amazonaws.com%2Fsamples%2Fcram%2F2021_platinum%2FGRCh38_exomes%2FNA12891.cram.crai&sample2=NA12891&affectedStatus2=unaffected]]></url>
+            <url><![CDATA[
+/?gene=PDHA1&
+genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=${proband_vcf}&tbi0=${proband_vcf}&bam0=${proband_bam}&bai0=${proband_bam}&sample0=proband&affectedStatus0=${proband_affected}&rel1=father&sex1=male&vcf1=${input_type.father.vcf}&tbi1=${input_type.father.vcf}&bam1=${input_type.father.bam}&bai1=${input_type.father.bam}&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=${input_type.mother.vcf}&tbi2=${input_type.mother.vcf}&bam2=${input_type.mother.bam}&bai2=${input_type.mother.bam}&sample2=mother&affectedStatus2=${input_type.mother.affected}
+            ]]></url>
             <!--<url>/</url>-->
         </entry_point>
     </entry_points>
@@ -28,30 +31,28 @@ ID,SAMPLE_ID,PATERNAL_ID,MATERNAL_ID,SEX,AFFECTED_STATUS,RELATION,VCF_URL,TBI_UR
             ]]>
     </command>
     <inputs>
-        <section name="proband" title="Proband input">
-            <param name="bam_proband" type="data" format="bam" label="BAM file"/>
-            <param name="vcf_proband" type="data" format="vcf_bgzip" label="VCF file"/>
-            <param name="proband_gender" type="select" display="radio" label="Proband gender">
-                <option value="male" selected="true">Male</option>
-                <option value="female">Female</option>
-            </param>
-            <param name="proband_affected" type="boolean" truevalue="affected" falsevalue="unaffected" checked="true" label="Is the proband affected?"/>
-        </section>
-        <conditional name="input_style">
+        <param name="proband_bam" type="data" format="bam,cram" label="Proband BAM file"/>
+        <param name="proband_vcf" type="data" format="vcf_bgzip" label="Proband VCF file"/>
+        <param name="proband_sex" type="select" display="radio" label="Proband sex">
+            <option value="male" selected="true">Male</option>
+            <option value="female">Female</option>
+        </param>
+        <param name="proband_affected" type="boolean" truevalue="affected" falsevalue="unaffected" checked="true" label="Is the proband affected?"/>
+        <conditional name="input_type">
             <param name="input_type_selector" type="select" display="radio" label="Single/Trio analysis">
                 <option value="single" selected="true">Single</option>
                 <option value="trio">Trio</option>
             </param>
             <when value="trio">
                 <section name="father" title="Father input">
-                    <param name="bam_father" type="data" format="bam" label="BAM file"/>
-                    <param name="vcf_father" type="data" format="vcf_bgzip" label="VCF file"/>
-                    <param name="father_affected" type="boolean" truevalue="affected" falsevalue="unaffected" checked="false" label="Is the father affected?"/>
+                    <param name="bam" type="data" format="bam,cram" label="Father BAM file"/>
+                    <param name="vcf" type="data" format="vcf_bgzip" label="Father VCF file"/>
+                    <param name="affected" type="boolean" truevalue="affected" falsevalue="unaffected" checked="false" label="Is the father affected?"/>
                 </section>
                 <section name="mother" title="Mother input">
-                    <param name="bam_mother" type="data" format="bam" label="BAM file"/>
-                    <param name="vcf_mother" type="data" format="vcf_bgzip" label="VCF file"/>
-                    <param name="mother_affected" type="boolean" truevalue="affected" falsevalue="unaffected" checked="false" label="Is the mother affected?"/>
+                    <param name="bam" type="data" format="bam,cram" label="Mother BAM file"/>
+                    <param name="vcf" type="data" format="vcf_bgzip" label="Mother VCF file"/>
+                    <param name="affected" type="boolean" truevalue="affected" falsevalue="unaffected" checked="false" label="Is the mother affected?"/>
                 </section>
             </when>
         </conditional>
@@ -60,25 +61,6 @@ ID,SAMPLE_ID,PATERNAL_ID,MATERNAL_ID,SEX,AFFECTED_STATUS,RELATION,VCF_URL,TBI_UR
             <option value="GRCh38" selected="true">GRCh38</option>
             <option value="GRCh37">GRCh37</option>
         </param>
-        <conditional name="data_type">
-            <param name="datay_type_selector" type="select" display="radio" label="Exome/Genome">
-                <option value="exome" selected="true">Exome</option>
-                <option value="genome" selected="true">Genome</option>
-            </param>
-            <when value="exome">
-                <param name="bed_file" type="select" label="Select bed regions">
-                    <option value="standard" selected="true">Standard (GRCh37/38 Exonic Regions)</option>
-                    <option value="custom">Custom bed</option>
-                </param>
-            </when>
-            <when value="genome">
-                <param name="bed_file" type="select" label="Select bed regions">
-                    <option value="standard" selected="true">Standard (GRCh37/38 Exonic Regions)</option>
-                    <option value="custom">Custom bed</option>
-                    <option value="none">No bed</option>
-                </param>
-            </when>
-        </conditional>
     </inputs>
     <outputs>
         <data name="outfile" format="txt" />
