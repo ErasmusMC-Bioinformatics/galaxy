@@ -29,8 +29,26 @@ ID,SAMPLE_ID,PATERNAL_ID,MATERNAL_ID,SEX,AFFECTED_STATUS,RELATION,VCF_URL,TBI_UR
             ]]>
     </command>
     <inputs>
+        <param name="pedigree" type="data" format="ped" label="Pedigree file"/>
+        <param name="bam_proband" type="data" format="bam" label="BAM file"/>
+        <param name="vcf_proband" type="data" format="vcf_bgzip" label="VCF file"/>
+        <param name="input_type_selector" type="select" display="radio" label="Single/Trio analysis">
+            <option value="single" selected="true">Single</option>
+            <option value="trio">Trio</option>
+        </param>
+        <conditional name="input_style">
+            <when value="trio">
+                <section name="father" title="Father options">
+                    <param name="bam_father" type="data" format="bam" label="BAM file"/>
+                    <param name="vcf_father" type="data" format="vcf_bgzip" label="VCF file"/>
+                </section>
+                <section name="mother" title="Mother options">
+                    <param name="bam_mother" type="data" format="bam" label="BAM file"/>
+                    <param name="vcf_mother" type="data" format="vcf_bgzip" label="VCF file"/>
+                </section>
+            </when>
+        </conditional>
         <param name="genes" type="text" value="PDHA1,ARHGAP8,RAI1,PLXNA1,SCN8A,SMARCA2" size="100x5" label="Genes of interest" help=""/>
-
     </inputs>
     <outputs>
         <data name="outfile" format="txt" />
