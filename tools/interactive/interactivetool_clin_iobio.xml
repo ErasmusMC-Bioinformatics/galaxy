@@ -8,9 +8,9 @@
             <port>4030</port>
             <url><![CDATA[
 /?gene=PDHA1&
-genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=${proband_vcf}&tbi0=${proband_vcf.metadata.tabix_index}.tbi&bam0=${proband_bam}&bai0=${proband_bam.metadata.bam_index}.bai&sample0=proband&affectedStatus0=${proband_affected}
+genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=proband.vcf.gz&tbi0=proband.vcg.gz.tbi&bam0=${proband_bam}&bai0=${proband_bam.metadata.bam_index}&sample0=proband&affectedStatus0=${proband_affected}
 #if str($input_type.input_type_selector) == "trio"
-&rel1=father&sex1=male&vcf1=${input_type.father.vcf}&tbi1=${input_type.father.vcf.metadata.tabix_index}.tbi&bam1=${input_type.father.bam}&bai1=${input_type.father.bam.metadata.bam_index}.bai&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=${input_type.mother.vcf}&tbi2=${input_type.mother.vcf.metadata.tabix_index}.tbi&bam2=${input_type.mother.bam}&bai2=${input_type.mother.bam.metadata.bam_index}.bai&sample2=mother&affectedStatus2=${input_type.mother.affected}
+&rel1=father&sex1=male&vcf1=${input_type.father.vcf}&tbi1=${input_type.father.vcf.metadata.tabix_index}&bam1=${input_type.father.bam}&bai1=${input_type.father.bam.metadata.bam_index}&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=${input_type.mother.vcf}&tbi2=${input_type.mother.vcf.metadata.tabix_index}&bam2=${input_type.mother.bam}&bai2=${input_type.mother.bam.metadata.bam_index}&sample2=mother&affectedStatus2=${input_type.mother.affected}
 #end if
             ]]></url>
             <!--<url>/</url>-->
@@ -30,8 +30,24 @@ ID,SAMPLE_ID,PATERNAL_ID,MATERNAL_ID,SEX,AFFECTED_STATUS,RELATION,VCF_URL,TBI_UR
         ]]></configfile>
     </configfiles>-->
     <command><![CDATA[
-        nginx -g 'daemon off;'
-            ]]>
+    cp ${proband_vcf} . &&
+    cp ${proband_vcf.metadata.tabix_index} . &&
+    cp ${proband_bam} . &&
+    cp ${proband_bam.metadata.bam_index} . &&
+#if str($input_type.input_type_selector) == "trio"
+    cp ${input_type.father.vcf} . &&
+    cp ${input_type.father.vcf.metadata.tabix_index} . &&
+    cp ${input_type.father.bam} . &&
+    cp ${input_type.father.bam.metadata.bam_index} . &&
+    cp ${input_type.mother.vcf} . &&
+    cp ${input_type.mother.vcf.metadata.tabix_index} . &&
+    cp ${input_type.mother.bam} . &&
+    cp ${input_type.mother.bam.metadata.bam_index} . &&
+#end if
+#set test = "testing"
+    echo $test > test.txt &&
+nginx -g 'daemon off;'
+]]>
     </command>
     <inputs>
         <param name="proband_bam" type="data" format="bam,cram" label="Proband BAM file"/>
