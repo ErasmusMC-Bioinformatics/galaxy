@@ -8,9 +8,9 @@
             <port>4030</port>
             <url><![CDATA[
 /?gene=PDHA1&
-genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=${proband_vcf}&tbi0=${proband_vcf}&bam0=${proband_bam}&bai0=${proband_bam}&sample0=proband&affectedStatus0=${proband_affected}
+genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=${proband_vcf}&tbi0=${proband_vcf.metadata.tabix_index}.tbi&bam0=${proband_bam}&bai0=${proband_bam.metadata.bam_index}.bai&sample0=proband&affectedStatus0=${proband_affected}
 #if str($input_type.input_type_selector) == "trio"
-&rel1=father&sex1=male&vcf1=${input_type.father.vcf}&tbi1=${input_type.father.vcf}&bam1=${input_type.father.bam}&bai1=${input_type.father.bam}&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=${input_type.mother.vcf}&tbi2=${input_type.mother.vcf}&bam2=${input_type.mother.bam}&bai2=${input_type.mother.bam}&sample2=mother&affectedStatus2=${input_type.mother.affected}
+&rel1=father&sex1=male&vcf1=${input_type.father.vcf}&tbi1=${input_type.father.vcf.metadata.tabix_index}.tbi&bam1=${input_type.father.bam}&bai1=${input_type.father.bam.metadata.bam_index}.bai&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=${input_type.mother.vcf}&tbi2=${input_type.mother.vcf.metadata.tabix_index}.tbi&bam2=${input_type.mother.bam}&bai2=${input_type.mother.bam.metadata.bam_index}.bai&sample2=mother&affectedStatus2=${input_type.mother.affected}
 #end if
             ]]></url>
             <!--<url>/</url>-->
@@ -35,7 +35,7 @@ ID,SAMPLE_ID,PATERNAL_ID,MATERNAL_ID,SEX,AFFECTED_STATUS,RELATION,VCF_URL,TBI_UR
     </command>
     <inputs>
         <param name="proband_bam" type="data" format="bam,cram" label="Proband BAM file"/>
-        <param name="proband_vcf" type="data" format="vcf_bgzip" label="Proband VCF file"/>
+        <param name="proband_vcf" type="data" format="vcf,vcf_bgzip" label="Proband VCF file"/>
         <param name="proband_sex" type="select" display="radio" label="Proband sex">
             <option value="male" selected="true">Male</option>
             <option value="female">Female</option>
@@ -49,12 +49,12 @@ ID,SAMPLE_ID,PATERNAL_ID,MATERNAL_ID,SEX,AFFECTED_STATUS,RELATION,VCF_URL,TBI_UR
             <when value="trio">
                 <section name="father" title="Father input">
                     <param name="bam" type="data" format="bam,cram" label="Father BAM file"/>
-                    <param name="vcf" type="data" format="vcf_bgzip" label="Father VCF file"/>
+                    <param name="vcf" type="data" format="vcf,vcf_bgzip" label="Father VCF file"/>
                     <param name="affected" type="boolean" truevalue="affected" falsevalue="unaffected" checked="false" label="Is the father affected?"/>
                 </section>
                 <section name="mother" title="Mother input">
                     <param name="bam" type="data" format="bam,cram" label="Mother BAM file"/>
-                    <param name="vcf" type="data" format="vcf_bgzip" label="Mother VCF file"/>
+                    <param name="vcf" type="data" format="vcf,vcf_bgzip" label="Mother VCF file"/>
                     <param name="affected" type="boolean" truevalue="affected" falsevalue="unaffected" checked="false" label="Is the mother affected?"/>
                 </section>
             </when>
