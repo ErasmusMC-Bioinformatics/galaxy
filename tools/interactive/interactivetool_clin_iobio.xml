@@ -1,19 +1,16 @@
 <tool id="interactive_tool_clin_iobio" tool_type="interactive" name="clin.iobio visualisation" version="v3.2.4">
     <requirements>
 	    <container type="docker">clintest</container>
-        <!--<container type="docker">whoisdonlee/iobio_container:main</container>-->
     </requirements>
     <entry_points>
         <entry_point name="Clin io.bio visualisation" requires_domain="True">
             <port>4030</port>
             <url><![CDATA[
-/?gene=PDHA1&
-genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=proband.vcf.gz&tbi0=proband.vcg.gz.tbi&bam0=${proband_bam}&bai0=${proband_bam.metadata.bam_index}&sample0=proband&affectedStatus0=${proband_affected}
+/genes=${genes}&species=Human&build=${refgen_version}&affectedSibs=&unaffectedSibs=&rel0=proband&sex0=${proband_sex}&vcf0=http://localhost:4030/galaxy/vcf0.vcf&tbi0=http://localhost:4030/galaxy/vcf0.vcf.tbi&bam0=http://localhost:4030/galaxy/bam0.bam&bai0=http://localhost:4030/galaxy/bam0.bam.bai&sample0=proband&affectedStatus0=${proband_affected}
 #if str($input_type.input_type_selector) == "trio"
-&rel1=father&sex1=male&vcf1=${input_type.father.vcf}&tbi1=${input_type.father.vcf.metadata.tabix_index}&bam1=${input_type.father.bam}&bai1=${input_type.father.bam.metadata.bam_index}&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=${input_type.mother.vcf}&tbi2=${input_type.mother.vcf.metadata.tabix_index}&bam2=${input_type.mother.bam}&bai2=${input_type.mother.bam.metadata.bam_index}&sample2=mother&affectedStatus2=${input_type.mother.affected}
+&rel1=father&sex1=male&vcf1=vcf1.vcf&tbi1=vcf1.vcf.tbi&bam1=bam1.bam&bai1=bam1.bam.bai&sample1=father&affectedStatus1=${input_type.father.affected}&rel2=mother&sex2=female&vcf2=vc2.vcf&tbi2=vcf2.vcf.tbi&bam2=bam2.bam&bai2=bam2.bam.bai&sample2=mother&affectedStatus2=${input_type.mother.affected}
 #end if
             ]]></url>
-            <!--<url>/</url>-->
         </entry_point>
     </entry_points>
     <!--<configfiles>
@@ -30,22 +27,22 @@ ID,SAMPLE_ID,PATERNAL_ID,MATERNAL_ID,SEX,AFFECTED_STATUS,RELATION,VCF_URL,TBI_UR
         ]]></configfile>
     </configfiles>-->
     <command><![CDATA[
-    cp ${proband_vcf} . &&
-    cp ${proband_vcf.metadata.tabix_index} . &&
-    cp ${proband_bam} . &&
-    cp ${proband_bam.metadata.bam_index} . &&
+    #import os
+    cp ${proband_vcf} vcf0.vcf &&
+    cp ${proband_vcf.metadata.tabix_index} vcf0.vcf.tbi &&
+    cp ${proband_bam} bam0.bam &&
+    cp ${proband_bam.metadata.bam_index} bam0.bam.bai &&
 #if str($input_type.input_type_selector) == "trio"
-    cp ${input_type.father.vcf} . &&
-    cp ${input_type.father.vcf.metadata.tabix_index} . &&
-    cp ${input_type.father.bam} . &&
-    cp ${input_type.father.bam.metadata.bam_index} . &&
-    cp ${input_type.mother.vcf} . &&
-    cp ${input_type.mother.vcf.metadata.tabix_index} . &&
-    cp ${input_type.mother.bam} . &&
-    cp ${input_type.mother.bam.metadata.bam_index} . &&
+    cp ${input_type.father.vcf} vcf1.vcf &&
+    cp ${input_type.father.vcf.metadata.tabix_index} vcf1.vcf.tbi &&
+    cp ${input_type.father.bam} bam1.bam &&
+    cp ${input_type.father.bam.metadata.bam_index} bam1.bam.bai &&
+    cp ${input_type.mother.vcf} vcf2.vcf &&
+    cp ${input_type.mother.vcf.metadata.tabix_index} vcf2.vcf.tbi &&
+    cp ${input_type.mother.bam} bam2.bam &&
+    cp ${input_type.mother.bam.metadata.bam_index} bam2.bam.bai &&
 #end if
-#set test = "testing"
-    echo $test > test.txt &&
+ln -s \$PWD /usr/share/nginx/html/galaxy &&
 nginx -g 'daemon off;'
 ]]>
     </command>
@@ -87,15 +84,22 @@ nginx -g 'daemon off;'
     <tests>
     </tests>
     <help><![CDATA[
-        Required inputs:
+    Clin.iobio provides a comprehensive and guided workflow to review sequencing data and report impactful variants. Clin.iobio also helps prioritize variants based on multiple integrated gene:disease association algorithms and knowledge bases.
 
-        1. BAM file: binary alignment map file
+    Required inputs:
 
-        The `iobio project`_ is developed by the `Marth lab`_ at the `University of Utah Center for Genetic Discovery`_.
+    1. Proband BAM file
+    2. Proband VCF file
 
-        .. _iobio project: https://iobio.io
-        .. _Marth lab: https://marthlab.org/
-        .. _University of Utah Center for Genetic Discovery: https://ucgd.genetics.utah.edu/
+    Optional inputs (trio analysis):
 
+    1. Father & Mother BAM file
+    2. Father & Mother VCF file
+
+    The `iobio project`_ is developed by the `Marth lab`_ at the `University of Utah Center for Genetic Discovery`_.
+
+    .. _iobio project: https://iobio.io
+    .. _Marth lab: https://marthlab.org/
+    .. _University of Utah Center for Genetic Discovery: https://ucgd.genetics.utah.edu/
     ]]></help>
 </tool>
